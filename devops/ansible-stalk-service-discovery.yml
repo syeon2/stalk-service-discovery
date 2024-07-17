@@ -1,0 +1,21 @@
+- hosts: stalk-service-discovery
+  become: true
+
+  tasks:
+    - name: stop the cloud service discovery container
+      command: docker stop stalk-service-discovery
+      ignore_errors: yes
+
+    - name: remove the cloud service discovery container
+      command: docker rm stalk-service-discovery
+      ignore_errors: yes
+
+    - name: remove the cloud service discovery docker image
+      command: docker rmi waterkite94/stalk-service-discovery
+      ignore_errors: yes
+
+    - name: pull the cloud service discovery image from docker hub
+      command: docker pull waterkite94/stalk-service-discovery
+
+    - name: execute cloud service discovery container
+      command: docker run -d -p 8761:8761 --name stalk-service-discovery --network stalk-network waterkite94/stalk-service-discovery
